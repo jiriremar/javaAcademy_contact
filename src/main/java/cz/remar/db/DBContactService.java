@@ -12,6 +12,8 @@ public class DBContactService {
 
     private static final String READ_ALL = "SELECT * FROM contact";
     private static final String CREATE = "INSERT INTO contact (name, email, phone) VALUES (?, ?, ?)";
+    private static final String DELETE = "DELETE FROM contact WHERE id = ?";
+
     private static final Logger logger = getLogger(DBContactService.class);
 
 
@@ -49,14 +51,25 @@ public class DBContactService {
             statement.setString(3, phone);
 
             return statement.executeUpdate();
-        } catch (SQLIntegrityConstraintViolationException e){
+        } catch (SQLIntegrityConstraintViolationException e) {
             System.out.println("Contact already exists");
             return 0;
-        }
-
-        catch(SQLException e){
+        } catch (SQLException e) {
             logger.error("ERROR: " + e.getMessage());
             return 0;
+        }
+    }
+
+    public int delete(int id) {
+        try (
+                Connection connection = HikaryCPDataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(DELETE)
+        ) {
+                statement.setInt(1, id);
+                return statement.executeUpdate();
+        } catch (SQLException e) {
+            logger.error("ERROR: " + e.getMessage());
+            return  0;
         }
     }
 }

@@ -29,7 +29,7 @@ public class CRUDManager {
                 case 0 -> printAllContacts();
                 case 1 -> System.out.println("Edit contact - NOT IMPLEMENTED");
                 case 2 -> createContact();
-                case 3 -> System.out.println("Delete contact - NOT IMPLEMENTED");
+                case 3 -> deleteContact();
                 case 4 -> System.out.println("Search contact - NOT IMPLEMENTED");
                 case 5 -> {
                     System.out.println("Good Bye");
@@ -38,6 +38,34 @@ public class CRUDManager {
                 default -> System.out.println("Wrong option");
             }
         }
+    }
+
+    private void deleteContact() {
+        final List<Contact> contacts = contactService.readAll();
+
+        int choice;
+        while (true) {
+            System.out.println("0. Cancel");
+            for (int i = 0; i < contacts.size(); i++) {
+                System.out.println((i + 1) + ". " + contacts.get(i));
+            }
+            System.out.println("Enter number of contact to delete");
+            choice = InputUtils.readInt();
+
+            if (choice == 0) {
+                return;
+            } else if (choice < 1 || choice > contacts.size()) {
+                System.out.println("Wrong option");
+                continue;
+            }
+
+            // delete ID
+            if (contactService.delete(contacts.get(choice - 1).getId()) > 0){
+                System.out.println("Contact successfully deleted");
+                return;
+            }
+        }
+
     }
 
     private void createContact() {
