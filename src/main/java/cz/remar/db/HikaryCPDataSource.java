@@ -1,10 +1,13 @@
-package cz.remar;
+package cz.remar.db;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class HikaryCPDataSource {
 
@@ -12,10 +15,18 @@ public class HikaryCPDataSource {
 
     private static HikariDataSource ds;
 
+    private static final Logger logger = LoggerFactory.getLogger(HikaryCPDataSource.class);
+
     static {
-        config.setJdbcUrl("jdbc:mysql://localhost:3306/contacts");
-        config.setUsername("root");
-        config.setPassword("password");
+        final Properties prop = new Properties();
+        try {
+            prop.load(HikaryCPDataSource.class.getResourceAsStream("/application.properties"));
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        config.setJdbcUrl("jdbc:mysql://localhost:3306/" + prop.getProperty("db.name"));
+        config.setUsername(prop.getProperty("db.username"));
+        config.setPassword(prop.getProperty("db.password"));
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
