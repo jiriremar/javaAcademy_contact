@@ -17,6 +17,7 @@ public class InputUtils {
                 return input;
             } catch (Exception e) {
                 System.out.println("Invalid input, try again");
+                scanner.nextLine();
             }
         }
     }

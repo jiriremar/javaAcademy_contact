@@ -11,9 +11,9 @@ import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-public class DBContactServise {
+public class DBContactService {
     private static final String READ_ALL = "SELECT * FROM contact";
-    private static final Logger logger = getLogger(DBContactServise.class);
+    private static final Logger logger = getLogger(DBContactService.class);
 
     public List<Contact> readAll() {
         try(Connection connection = HikaryCPDataSource.getConnection();
