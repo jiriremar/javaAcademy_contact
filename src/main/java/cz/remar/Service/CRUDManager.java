@@ -8,10 +8,10 @@ import java.util.List;
 
 public class CRUDManager {
 
-    private final DBContactService contactServise;
+    private final DBContactService contactService;
 
     public CRUDManager() {
-        contactServise = new DBContactService();
+        contactService = new DBContactService();
     }
 
     public void printOptions() {
@@ -28,7 +28,7 @@ public class CRUDManager {
             switch (choice) {
                 case 0 -> printAllContacts();
                 case 1 -> System.out.println("Edit contact - NOT IMPLEMENTED");
-                case 2 -> System.out.println("Add contact - NOT IMPLEMENTED");
+                case 2 -> createContact();
                 case 3 -> System.out.println("Delete contact - NOT IMPLEMENTED");
                 case 4 -> System.out.println("Search contact - NOT IMPLEMENTED");
                 case 5 -> {
@@ -40,8 +40,23 @@ public class CRUDManager {
         }
     }
 
+    private void createContact() {
+        System.out.println("Enter contact name: ");
+        final String name = InputUtils.readString();
+        System.out.println("Enter contact email: ");
+        final String email = InputUtils.readString();
+        System.out.println("Enter contact phone number: ");
+        final String phoneNumber = InputUtils.readString();
+
+        if (contactService.create(name, email, phoneNumber) > 0) {
+            System.out.println("Contact created");
+        } else {
+            System.out.println("Contact not created");
+        }
+    }
+
     private void printAllContacts() {
-        final List<Contact> contacts = contactServise.readAll();
+        final List<Contact> contacts = contactService.readAll();
         contacts.forEach(System.out::println);
     }
 }
